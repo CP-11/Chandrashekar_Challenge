@@ -75,6 +75,4 @@ PLAY RECAP *********************************************************************
    ```
 ### ToDO:
 
-* modify nginx config to redirect to 443 and add key and cert paths
-* update readme with openssl commands and nginx-conf
 * add tests using molecule (https://ansible.readthedocs.io/projects/molecule/)
