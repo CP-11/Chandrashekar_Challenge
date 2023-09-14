@@ -1,0 +1,45 @@
+---
+- hosts: webserver
+  become: true
+
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+        
+    - name: remove default html file
+      file:
+        path: /var/www/html/index.nginx-debian.html
+        state: absent
+
+    - name: delete default config
+      file:
+        path: /etc/nginx/sites-available/default
+        state: absent
+
+    - name: copy nginx config
+      copy:
+        src: files/nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+        owner: root
+        group: root
+        mode: 0744
+      notify: Restart Nginx
+
+    - name: copy html
+      copy:
+        src: index.html
+        dest: /var/www/html
+        owner: root
+        group: root
+        mode: 0744
+      notify: Restart Nginx
+
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
