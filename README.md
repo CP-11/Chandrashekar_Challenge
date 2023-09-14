@@ -20,11 +20,42 @@
 
 1. change values in the variables file and refresh setup
 2. run the following to create webserver
-   1. `terraform init` - download plugins, providers and refresh/setup state in s3
-   2. `terraform plan -out deployplan` - generate dependecy graph and plan to create/update/delete resources
-   3. `terraform apply deployplan` - deploy the changes/requests based on the plan file supplied and statefile configured.
+   1. `terraform init`
+   2. `terraform plan -out deployplan`
+   3. `terraform apply deployplan`
+
+
 3. Execute ansible:
    `ansible-playbook -i inventory/webservers.ini playbook.yml`
+```
+mee@ubuntu:Chandrashekar_Challenge$ ansible-playbook -i inventory/webservers.ini playbook.yml 
+
+
+PLAY [webserver] ********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************
+ok: [10.30.0.023]
+
+TASK [install nginx] ****************************************************************************************************************
+ok: [10.30.0.023]
+
+TASK [remove the nginx file] ********************************************************************************************************
+ok: [10.30.0.023]
+
+TASK [remove the default nginx file] ************************************************************************************************
+changed: [10.30.0.023]
+
+TASK [copy the nginx default file to server] ****************************************************************************************
+changed: [10.30.0.023]
+
+TASK [copy the html] ****************************************************************************************************************
+ok: [10.30.0.023]
+
+PLAY RECAP **************************************************************************************************************************
+
+
+10.30.0.023             : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
+```
 
 ## Testing
 
@@ -42,3 +73,8 @@
     "ping": "pong"
    }
    ```
+### ToDO:
+
+* modify nginx config to redirect to 443 and add key and cert paths
+* update readme with openssl commands and nginx-conf
+* add tests using molecule (https://ansible.readthedocs.io/projects/molecule/)
